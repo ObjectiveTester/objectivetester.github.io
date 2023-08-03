@@ -47,36 +47,85 @@ Open the 'jester' folder in NetBeans or your favourite IDE, and build it.<br>
 Build a package from the command line with <code>mvn package</code> </p>
 
 <h3>
-<a name="running-jester" class="anchor" href="#running-jester"><span class="octicon octicon-link"></span></a>Running jester</h3>
+<a name="running-jester" class="anchor" href="#running-jester"><span class="octicon octicon-link"></span></a>Running Jester</h3>
 
-        <p>Once built, either double-click <code>Jester-0.3.jar</code> in the <code>target</code>folder, or start from the command line with <code>java -jar target/Jester-0.3.jar</code>
+        <p>Once built, either double-click <code>Jester-0.5.jar</code> in the <code>target</code>folder, or start from the command line with <code>java -jar target/Jester-0.5.jar</code>
 Then enter an API URI and click GET</p>
 
-<p>The GET request is made and the response parsed to a tree view representation of the JSON data. data values can be 'asserted' on</p>
+<h3>
+  <a name="simple-example" class="anchor" href="#simple-example"><span class="octicon octicon-link"></span></a>Simple example</h3>
+
+<p>The GET request is made and the response parsed to a tree view representation of the JSON data. Values can be 'asserted' on</p>
 
 <p><img src="https://objectivetester.github.io/jester/assert%20on%20response.png" alt=""></p>
 
-<p>The 'assert' action writes a Java statement into the right-hand pane </p>
+<p>The 'assert' action writes a Java statement into the lower frame </p>
 
 <p><img src="https://objectivetester.github.io/jester/test%20statement%20updated.png" alt=""></p>
 
-<p>This generates jUnit output using REST Assured</p>
+<p>This generates JUnit or TestNG output using REST Assured</p>
 
 <pre><code>
   @Test
   public void test1() {
       //get:https://api.github.com/users/objectivetester
-      given().when().header("MyHeader", "foo").cookie("JSESSIONID", "1234").get("https://api.github.com/users/objectivetester").then()
+      given().filter(cookieFilter).when().get("https://api.github.com/users/objectivetester").then()
       //assert:name=Steve Mellor
       .body("name", equalTo("Steve Mellor"))
       .statusCode(200);
   }
 </code></pre>
 
-Junit 4 and jUnit 5 output can be generated.
-<br>
-<br>
-Jester also supports POST and DELETE, and the import and editing of JSON data.
+<h3>
+  <a name="testing-rest-apis" class="anchor" href="#testing-rest-apis"><span class="octicon octicon-link"></span></a>Testing REST API's</h3>
+<p>Jester can GET, POST, DELETE and assert on values in responses and all of these operations generate Java statements using either Junit5 or TestNG.</p>
+
+<h4>
+  <a name="post" class="anchor" href="#post"><span class="octicon octicon-link"></span></a>POST</h4>
+  <p>Create a request body by inserting keys and values into the Request Object (this may be a little unstable, with minimal error checking), or start by copying a response with 'File -> Copy Response into Request', or import some JSON data with 'File -> Import'.
+  <br><br>Then click the 'POST' icon.</p>
+
+<h4>
+  <a name="get" class="anchor" href="#get"><span class="octicon octicon-link"></span></a>GET</h4>
+  <p>Enter a URI into the text field and click 'GET'. The Response Object treeview will be updated with a graphical representation of the response. You can then add assertions, or copy it (from 'File -> Copy Response into Request') into the Request Object and use it in a POST.</p>
+
+<h4>
+  <a name="delete" class="anchor" href="#delete"><span class="octicon octicon-link"></span></a>DELETE</h4>
+  <p>Sends a simple DELETE request.</p>    
+
+<h4>
+  <a name="assert" class="anchor" href="#assert"><span class="octicon octicon-link"></span></a>Assert</h4>
+  <p>Right-click on a value in the Response Object tree and assert on it.
+    <br><br>
+    In the lower frame, Java statements are generated. These should be runnable from an IDE, etc. after a little cleanup.
+  </p>  
+
+<h4>
+  <a name="cookies-headers" class="anchor" href="#cookies-headers"><span class="octicon octicon-link"></span></a>Cookies & Headers</h4>
+  <p>Cookies and custom headers can be included in the requests by adding them to the text boxes as a comma seperated list of key=value pairs -  e.g.
+    <br><br>
+  <code>Authorization=Bearer abcde..., JSESSIONID=1234...</code></p>
+
+<h4>
+  <a name="query-parameters" class="anchor" href="#query-paramaters"><span class="octicon octicon-link"></span></a>Query Parameters</h4>
+  <p>Add query parameters to the request by adding them to the URI - e.g.
+    <br><br>
+    <code>q=test&type=debug</code></p>  
+
+<h4>
+  <a name="authorization" class="anchor" href="#authorization"><span class="octicon octicon-link"></span></a>Authorization</h4>
+  Jester works with:
+    <br><br><br>
+    <b>API Keys</b> - by including the key as a query string, header or cookie
+    <br><br>
+    <b>Basic auth</b> - by including the user:passwd as Base64 in a header - e.g. `<code>Authorization=Basic dXNlcjpwYXNzd2Q=</code>`
+    <br><br>
+    <b>Bearer token</b> - by including the token in a header - e.g. `<code>Authorization=Bearer abcde....</code>`
+    <br><br>
+    <b>Cookie auth</b> - cookies can be set and are extracted from responses, they may need to be cleaned up in the tests.
+    <br><br>
+
+
 
       </section>
     </div>
